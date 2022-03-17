@@ -8,33 +8,34 @@ const SaltRounds = 10;
 module.exports = {
   LoginUser: async (req, res) => {
     const { email, password } = req.body;
+    // console.log(email, password);
     try {
       const User = await UserModel.findOne({ email });
+      // console.log(User);
       if (!User) {
         return res.status(400).json({
           message: "User not found",
         });
-      } else {
-        const isMatch = await bcrypt.compare(password, User.password);
-        if (!isMatch) {
-          return res.status(400).json({
-            message: "Password is incorrect",
-          });
-        } else {
-          const token = jwt.sign(
-            {
-              id: User._id,
-              email: User.email,
-              name: User.firstname + " " + User.lastname,
-            },
-            process.env.JWT_SECRET
-          );
-          return res.status(200).json({
-            message: "Login Success",
-            token,
-          });
-        }
       }
+      const isMatch = await bcrypt.compare(password, User.password);
+      // console.log(!isMatch);
+      if (isMatch) {
+        return res.status(400).json({
+          message: "Password is incorrect",
+        });
+      }
+      const token = jwt.sign(
+        {
+          id: User._id,
+          email: User.email,
+          name: User.firstname + " " + User.lastname,
+        },
+        process.env.JWT_SECRET
+      );
+      return res.status(200).json({
+        message: "Login Success",
+        token,
+      });
     } catch (error) {
       return res.status(400).json({
         message: "Something went wrong",
@@ -43,7 +44,7 @@ module.exports = {
   },
 
   SignUpUser: async (req, res) => {
-    const { firstname, lastname, email, password, phone, address } = req.body;
+    const { firstname, lastname, email, password } = req.body;
 
     //schemas
     const userSchema = yup.object().shape({
