@@ -26,6 +26,22 @@ const PasswordmanagerSchema = new Schema({
       },
     },
   ],
+  shared: [
+    {
+      passwordId:{
+        type: String,
+      },
+      email: 
+      {
+        type: String,
+      }
+    },
+    {
+      hashPass: {
+        type: String,
+      }
+    }
+  ]
 });
 
 module.exports = PasswordManager = mongoose.model(

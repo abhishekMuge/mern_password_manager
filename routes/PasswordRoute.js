@@ -6,6 +6,7 @@ router.get("/getAllPassword", function (req, res) {
 });
 
 router.post("/save-password", userAuth, PasswordController.savePassword);
+router.post("/share-password", userAuth, PasswordController.sharePassword);
 
 router.get("/getPassword", function (req, res) {
   res.send("Password getting");
@@ -15,5 +16,7 @@ router.get(
   userAuth,
   PasswordController.deletePasswords
 );
+
+router.get("/decrypt/:passwordId", userAuth, PasswordController.passwordDecrypt)
 
 module.exports = router;
